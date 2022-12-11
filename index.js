@@ -76,6 +76,34 @@ function crearnota() {
             localStorage.notas = JSON.stringify(notas);
         }
     })
+    
+    $("#div--tareas").on("click", ".low", function () {
+        $(this).parent().parent().find(".prioridad").attr('aria-pressed', 'false');
+        $(this).attr('aria-pressed', 'true');
+        notas[$(this).parent().parent().index()].priority = "low";
+        localStorage.notas = JSON.stringify(notas);
+        $("#div--tareas").html("");
+        leerNotas();
+
+    })
+    $("#div--tareas").on("click", ".normal", function () {
+        $(this).parent().parent().find(".prioridad").attr('aria-pressed', 'false');
+        $(this).attr('aria-pressed', 'true');
+        notas[$(this).parent().parent().index()].priority = "normal";
+
+        localStorage.notas = JSON.stringify(notas);
+        $("#div--tareas").html("");
+        leerNotas();
+        
+    })
+    $("#div--tareas").on("click", ".high", function () {
+        $(this).parent().parent().find(".prioridad").attr('aria-pressed', 'false');
+        $(this).attr('aria-pressed', 'true');
+        notas[$(this).parent().parent().index()].priority = "high";
+
+        localStorage.notas = JSON.stringify(notas);
+        $("#div--tareas").html("");
+        leerNotas()})
     $(divPriority).append($(`<p>Añadido hace ${Math.floor(((Date.now() - nota.date)/1000)/60)} minutos</p>`));
 }
 
