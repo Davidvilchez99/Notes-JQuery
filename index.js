@@ -1,6 +1,5 @@
 var notas;
-var contadorTareas = 0;
-var contadorTareasPendientes = 0;
+
 $(document).ready(function () {
     if (localStorage.notas != null)
         leerNotas();
@@ -23,10 +22,9 @@ function crearnota() {
     }
     notas.push(nota);
     localStorage.setItem("notas", JSON.stringify(notas));
-    contadorTareas++;
-    contadorTareasPendientes++;
-    $("#tareas").html(contadorTareasPendientes);
-    $("#de").html(contadorTareas);
+
+    $("#tareas").html(notas.length);
+    $("#de").html(notas.length);
     const div = document.createElement("div");
     const divH2 = document.createElement("div");
     const divH2Div = document.createElement("div");
@@ -42,6 +40,7 @@ function crearnota() {
     $(i).addClass("fa fa-trash");
     $(i).attr('aria-hidden', 'true');
     $(div).addClass("note--div");
+    $(div).attr('hidden', 'true');
     const pTimeAdd = document.createElement("p");
     $(div).append(divH2);
     $(div).append(divPriority);
@@ -63,17 +62,26 @@ function crearnota() {
     $(divPriority).append(pPrioridad);
     $(divPriority).append($('<button class="low  prioridad">Low ↓</button>'), $('<button class="normal prioridad">Normal</button>'), $('<button aria-pressed="true" class="high prioridad">High ↑</button>'));
     $("#input").val(" ");
-
+    $(div).fadeIn("slow");
+contador = notas.length;
     $(".myCheckBox").on('change', function () {
         if ($(this).is(':checked')) {
             $(this).siblings().css("text-decoration", "line-through");
             notas[$(this).parent().parent().parent().index()].completed = "true";
             localStorage.notas = JSON.stringify(notas);
-            contadorTareasPendientes--;
+            // notasCompleted = [];
+            // for (nota of notas){
+            //     if(nota.completed == "false"){
+            //         notasCompleted.push(nota);
+            // }}
+            contador--;
+            $("#tareas").html(contador);
         } else {
             $(this).siblings().css("text-decoration", "none");
             notas[$(this).parent().parent().parent().index()].completed = "false";
             localStorage.notas = JSON.stringify(notas);
+            
+            $("#tareas").html(contador--);
         }
     })
     
@@ -103,17 +111,40 @@ function crearnota() {
 
         localStorage.notas = JSON.stringify(notas);
         $("#div--tareas").html("");
-        leerNotas()})
+        leerNotas()
+    })
     $(divPriority).append($(`<p>Añadido hace ${Math.floor(((Date.now() - nota.date)/1000)/60)} minutos</p>`));
+
 }
 
 function leerNotas() {
     notas = [];
     notasRecogidas = JSON.parse(localStorage.notas);
-    for (j = 0; j < notasRecogidas.length; j++) {
-        contadorTareas++;
-        contadorTareasPendientes++;
-        notas.push(notasRecogidas[j]);
+    notasOrdenadas=[];
+    for(let nota of notasRecogidas){
+        if(nota.priority == "high"){
+            notasOrdenadas.push(nota);
+        }
+    }
+    for(let nota of notasRecogidas){
+        if(nota.priority == "normal"){
+            notasOrdenadas.push(nota);
+        }
+    }
+    for(let nota of notasRecogidas){
+        if(nota.priority == "low"){
+            notasOrdenadas.push(nota);
+        }
+    }
+    for(let nota of notasRecogidas){
+        if(nota.priority == false){
+            notasOrdenadas.push(nota);
+        }
+    }
+    for (j = 0; j < notasOrdenadas.length; j++) {
+        $("#tareas").html(notasOrdenadas.length);
+        $("#de").html(notasOrdenadas.length);
+        notas.push(notasOrdenadas[j]);
         const div = document.createElement("div");
         const divH2 = document.createElement("div");
         const divH2Div = document.createElement("div");
@@ -144,7 +175,7 @@ function leerNotas() {
         $(divH2Div2).append(i);
         $(divPriority).append(pTimeAdd);
         $(div).addClass("note--div");
-        $(h2).html(notasRecogidas[j].title);
+        $(h2).html(notasOrdenadas[j].title);
         $("#div--tareas").append(div);
         let btnHigh = $('<button class="high prioridad">High ↑</button>');
         let btnLow = $('<button class="low prioridad">Low ↓</button>');
@@ -154,26 +185,25 @@ function leerNotas() {
         $(divPriority).append(btnLow);
         $(divPriority).append(btnNormal);
         $(divPriority).append(btnHigh);
-        $(divPriority).append($(`<p>Añadido hace ${Math.floor(((Date.now() - notasRecogidas[j].date)/1000)/60)} minutos</p>`));
-        if (notasRecogidas[j].priority == "low"){
+        $(divPriority).append($(`<p>Añadido hace ${Math.floor(((Date.now() - notasOrdenadas[j].date)/1000)/60)} minutos</p>`));
+        if (notasOrdenadas[j].priority == "low"){
             btnLow.attr('aria-pressed', 'true');
         }
-        else if (notasRecogidas[j].priority == "normal") {
+        else if (notasOrdenadas[j].priority == "normal") {
             btnNormal.attr('aria-pressed', 'true');
         }
-        else if (notasRecogidas[j].priority == "high") {
+        else if (notasOrdenadas[j].priority == "high") {
             btnHigh.attr('aria-pressed', 'true');
         }
 
-        if (notasRecogidas[j].completed == "true") {
+        if (notasOrdenadas[j].completed == "true") {
             checkBox.attr('checked', "true");
             $(h2).css("text-decoration", "line-through");
-            contadorTareasPendientes--;
+            $("#tareas").html(notasOrdenadas.length-1);
+            
         }
 
     }
-    $("#tareas").html(contadorTareasPendientes);
-    $("#de").html(contadorTareas);
 
     $("#borrarTareas").click(function() {
         let nuevasNotas = [];
@@ -185,21 +215,31 @@ function leerNotas() {
         localStorage.setItem('notas', JSON.stringify(nuevasNotas));
         $("#div--tareas").html("");
         leerNotas();
-        contadorTareas = nuevasNotas.length();
-        contadorTareasPendientes = nuevasNotas.length();
+        $("#tareas").html(nuevasNotas.length);
+        $("#de").html(nuevasNotas.length);
+        
     });
 
-
+contador1 = notasRecogidas.length;
     $(".myCheckBox").on('change', function () {
         if ($(this).is(':checked')) {
             $(this).siblings().css("text-decoration", "line-through");
             notas[$(this).parent().parent().parent().index()].completed = "true";
             localStorage.notas = JSON.stringify(notas);
-            contadorTareasPendientes--;
+            // notasCompleted = [];
+            // for (nota of notas){
+            //     if(nota.completed == "false"){
+            //         notasCompleted.push(nota);
+            // }
+        //}
+        contador1--;
+            $("#tareas").html(contador1)
         } else {
             $(this).siblings().css("text-decoration", "none");
             notas[$(this).parent().parent().parent().index()].completed = "false";
             localStorage.notas = JSON.stringify(notas);
+            contador1++;
+            $("#tareas").html(contador1);
         }
     })
     
@@ -239,8 +279,7 @@ function leerNotas() {
         });
         notas.splice($(this).parent().parent().parent().index(), 1);
         localStorage.notas = JSON.stringify(notas);
-        contadorTareasPendientes--;
-        contadorTareas--;
+        $("#tareas").html(notas.length);
+        $("#de").html(notas.length);
     });
-
 }
