@@ -110,21 +110,11 @@ function crearnota() {
 
         localStorage.notas = JSON.stringify(notas);
         $("#div--tareas").html("");
-        leerNotas()
+        leerNotas();
     })
     
     /*fecha*/
     $(divPriority).append($(`<p>Añadido hace ${Math.floor(((Date.now() - nota.date)/1000)/60)} minutos</p>`));
-    /*elimina el que clickas */
-    $("#div--tareas").on("click", "i", function () {
-        $(this).fadeOut("normal", function () {
-            $(this).parent().parent().parent().remove();
-        });
-        notas.splice($(this).parent().parent().parent().index(), 1);
-        localStorage.notas = JSON.stringify(notas);
-        $("#tareas").html(notas.length);
-        $("#de").html(notas.length);
-    });
 }
 
 function leerNotas() {
