@@ -23,6 +23,7 @@ function crearnota() {
     notas.push(nota);
     localStorage.setItem("notas", JSON.stringify(notas));
 
+    /* crea nota -div -marcadores*/
     $("#tareas").html(notas.length);
     $("#de").html(notas.length);
     const div = document.createElement("div");
@@ -63,17 +64,14 @@ function crearnota() {
     $(divPriority).append($('<button class="low  prioridad">Low ↓</button>'), $('<button class="normal prioridad">Normal</button>'), $('<button aria-pressed="true" class="high prioridad">High ↑</button>'));
     $("#input").val(" ");
     $(div).fadeIn("slow");
-contador = notas.length;
+    contador = notas.length;
+
+    /*function checkbox -modifica array -contador*/
     $(".myCheckBox").on('change', function () {
         if ($(this).is(':checked')) {
             $(this).siblings().css("text-decoration", "line-through");
             notas[$(this).parent().parent().parent().index()].completed = "true";
             localStorage.notas = JSON.stringify(notas);
-            // notasCompleted = [];
-            // for (nota of notas){
-            //     if(nota.completed == "false"){
-            //         notasCompleted.push(nota);
-            // }}
             contador--;
             $("#tareas").html(contador);
         } else {
@@ -85,6 +83,7 @@ contador = notas.length;
         }
     })
     
+    /*low normal high  priority*/
     $("#div--tareas").on("click", ".low", function () {
         $(this).parent().parent().find(".prioridad").attr('aria-pressed', 'false');
         $(this).attr('aria-pressed', 'true');
@@ -113,14 +112,26 @@ contador = notas.length;
         $("#div--tareas").html("");
         leerNotas()
     })
+    
+    /*fecha*/
     $(divPriority).append($(`<p>Añadido hace ${Math.floor(((Date.now() - nota.date)/1000)/60)} minutos</p>`));
-
+    /*elimina el que clickas */
+    $("#div--tareas").on("click", "i", function () {
+        $(this).fadeOut("normal", function () {
+            $(this).parent().parent().parent().remove();
+        });
+        notas.splice($(this).parent().parent().parent().index(), 1);
+        localStorage.notas = JSON.stringify(notas);
+        $("#tareas").html(notas.length);
+        $("#de").html(notas.length);
+    });
 }
 
 function leerNotas() {
     notas = [];
     notasRecogidas = JSON.parse(localStorage.notas);
     notasOrdenadas=[];
+    /*ordena*/
     for(let nota of notasRecogidas){
         if(nota.priority == "high"){
             notasOrdenadas.push(nota);
@@ -141,6 +152,7 @@ function leerNotas() {
             notasOrdenadas.push(nota);
         }
     }
+    /*para cada elemento crea una nota*/
     for (j = 0; j < notasOrdenadas.length; j++) {
         $("#tareas").html(notasOrdenadas.length);
         $("#de").html(notasOrdenadas.length);
@@ -186,6 +198,7 @@ function leerNotas() {
         $(divPriority).append(btnNormal);
         $(divPriority).append(btnHigh);
         $(divPriority).append($(`<p>Añadido hace ${Math.floor(((Date.now() - notasOrdenadas[j].date)/1000)/60)} minutos</p>`));
+        /*comprueba botones*/
         if (notasOrdenadas[j].priority == "low"){
             btnLow.attr('aria-pressed', 'true');
         }
@@ -195,7 +208,7 @@ function leerNotas() {
         else if (notasOrdenadas[j].priority == "high") {
             btnHigh.attr('aria-pressed', 'true');
         }
-
+        /*tacha las hechas*/
         if (notasOrdenadas[j].completed == "true") {
             checkBox.attr('checked', "true");
             $(h2).css("text-decoration", "line-through");
@@ -204,7 +217,7 @@ function leerNotas() {
         }
 
     }
-
+    /*borra tareas hechas*/
     $("#borrarTareas").click(function() {
         let nuevasNotas = [];
         for (nota of notas) {
@@ -220,19 +233,14 @@ function leerNotas() {
         
     });
 
-contador1 = notasRecogidas.length;
+    /*function checkbox */
+    contador1 = notasRecogidas.length;
     $(".myCheckBox").on('change', function () {
         if ($(this).is(':checked')) {
             $(this).siblings().css("text-decoration", "line-through");
             notas[$(this).parent().parent().parent().index()].completed = "true";
             localStorage.notas = JSON.stringify(notas);
-            // notasCompleted = [];
-            // for (nota of notas){
-            //     if(nota.completed == "false"){
-            //         notasCompleted.push(nota);
-            // }
-        //}
-        contador1--;
+            contador1--;
             $("#tareas").html(contador1)
         } else {
             $(this).siblings().css("text-decoration", "none");
@@ -242,7 +250,7 @@ contador1 = notasRecogidas.length;
             $("#tareas").html(contador1);
         }
     })
-    
+    /*low high normal */
     $("#div--tareas").on("click", ".low", function () {
         $(this).parent().parent().find(".prioridad").attr('aria-pressed', 'false');
         $(this).attr('aria-pressed', 'true');
@@ -273,6 +281,7 @@ contador1 = notasRecogidas.length;
         
     })
 
+    /*elimina el que clickas */
     $("#div--tareas").on("click", "i", function () {
         $(this).fadeOut("normal", function () {
             $(this).parent().parent().parent().remove();
@@ -282,4 +291,6 @@ contador1 = notasRecogidas.length;
         $("#tareas").html(notas.length);
         $("#de").html(notas.length);
     });
+
 }
+
