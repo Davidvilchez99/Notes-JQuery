@@ -241,38 +241,32 @@ function leerNotas() {
         }
     })
     /*low high normal */
-    $("#div--tareas").on("click", ".low", function () {
+    function cambiarPrioridad(nuevaPrioridad)
+    {
         $(this).parent().parent().find(".prioridad").attr('aria-pressed', 'false');
         $(this).attr('aria-pressed', 'true');
-        notas[$(this).parent().parent().index()].priority = "low";
+        notas[$(this).parent().parent().index()].priority = nuevaPrioridad;
         localStorage.notas = JSON.stringify(notas);
         $("#div--tareas").html("");
         leerNotas();
+    }
+    $(".low").click(()=>{
+        cambiarPrioridad("low");
 
     })
-    $("#div--tareas").on("click", ".normal", function () {
-        $(this).parent().parent().find(".prioridad").attr('aria-pressed', 'false');
-        $(this).attr('aria-pressed', 'true');
-        notas[$(this).parent().parent().index()].priority = "normal";
-
-        localStorage.notas = JSON.stringify(notas);
-        $("#div--tareas").html("");
-        leerNotas();
+    $(".normal").click(()=>{
+        cambiarPrioridad("normal");
         
     })
-    $("#div--tareas").on("click", ".high", function () {
-        $(this).parent().parent().find(".prioridad").attr('aria-pressed', 'false');
-        $(this).attr('aria-pressed', 'true');
-        notas[$(this).parent().parent().index()].priority = "high";
-
-        localStorage.notas = JSON.stringify(notas);
-        $("#div--tareas").html("");
-        leerNotas();
+    //$("#div--tareas").on("click", ".high", function () {
+        $(".high").click(()=>{
+        cambiarPrioridad("high");
         
     })
 
     /*elimina el que clickas */
-    $("#div--tareas").on("click", "i", function () {
+    // $("#div--tareas").on("click", "i", function () {
+        $("i").click(function(){
         $(this).fadeOut("normal", function () {
             $(this).parent().parent().parent().remove();
         });
