@@ -84,34 +84,34 @@ function crearnota() {
     })
     
     /*low normal high  priority*/
-    $("#div--tareas").on("click", ".low", function () {
-        $(this).parent().parent().find(".prioridad").attr('aria-pressed', 'false');
-        $(this).attr('aria-pressed', 'true');
-        notas[$(this).parent().parent().index()].priority = "low";
-        localStorage.notas = JSON.stringify(notas);
-        $("#div--tareas").html("");
-        leerNotas();
+    // $("#div--tareas").on("click", ".low", function () {
+    //     $(this).parent().parent().find(".prioridad").attr('aria-pressed', 'false');
+    //     $(this).attr('aria-pressed', 'true');
+    //     notas[$(this).parent().parent().index()].priority = "low";
+    //     localStorage.notas = JSON.stringify(notas);
+    //     $("#div--tareas").html("");
+    //     leerNotas();
 
-    })
-    $("#div--tareas").on("click", ".normal", function () {
-        $(this).parent().parent().find(".prioridad").attr('aria-pressed', 'false');
-        $(this).attr('aria-pressed', 'true');
-        notas[$(this).parent().parent().index()].priority = "normal";
+    // })
+    // $("#div--tareas").on("click", ".normal", function () {
+    //     $(this).parent().parent().find(".prioridad").attr('aria-pressed', 'false');
+    //     $(this).attr('aria-pressed', 'true');
+    //     notas[$(this).parent().parent().index()].priority = "normal";
 
-        localStorage.notas = JSON.stringify(notas);
-        $("#div--tareas").html("");
-        leerNotas();
+    //     localStorage.notas = JSON.stringify(notas);
+    //     $("#div--tareas").html("");
+    //     leerNotas();
         
-    })
-    $("#div--tareas").on("click", ".high", function () {
-        $(this).parent().parent().find(".prioridad").attr('aria-pressed', 'false');
-        $(this).attr('aria-pressed', 'true');
-        notas[$(this).parent().parent().index()].priority = "high";
+    // })
+    // $("#div--tareas").on("click", ".high", function () {
+    //     $(this).parent().parent().find(".prioridad").attr('aria-pressed', 'false');
+    //     $(this).attr('aria-pressed', 'true');
+    //     notas[$(this).parent().parent().index()].priority = "high";
 
-        localStorage.notas = JSON.stringify(notas);
-        $("#div--tareas").html("");
-        leerNotas();
-    })
+    //     localStorage.notas = JSON.stringify(notas);
+    //     $("#div--tareas").html("");
+    //     leerNotas();
+    // })
     
     /*fecha*/
     $(divPriority).append($(`<p>Añadido hace ${Math.floor(((Date.now() - nota.date)/1000)/60)} minutos</p>`));
