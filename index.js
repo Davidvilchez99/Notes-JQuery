@@ -115,6 +115,42 @@ function crearnota() {
     
     /*fecha*/
     $(divPriority).append($(`<p>Añadido hace ${Math.floor(((Date.now() - nota.date)/1000)/60)} minutos</p>`));
+        /*low high normal */
+        function cambiarPrioridad(nuevaPrioridad, index)
+        {
+            $(this).parent().parent().find(".prioridad").attr('aria-pressed', 'false');
+            $(this).attr('aria-pressed', 'true');
+            notas[index].priority = nuevaPrioridad;
+            localStorage.notas = JSON.stringify(notas);
+            $("#div--tareas").html("");
+            leerNotas();
+        }
+        $(".low").click(function(){
+            index = ($(this).parent().parent().index());
+            cambiarPrioridad("low", index);
+        })
+        $(".normal").click(function(){
+            index = ($(this).parent().parent().index());
+            cambiarPrioridad("normal", index);
+            
+        })
+        $(".high").click(function(){
+            index = ($(this).parent().parent().index());
+            cambiarPrioridad("high", index);
+            
+        })
+    
+        /*elimina el que clickas */
+        // $("#div--tareas").on("click", "i", function () {
+            $("i").click(function(){
+            $(this).fadeOut("normal", function () {
+                $(this).parent().parent().parent().remove();
+            });
+            notas.splice($(this).parent().parent().parent().index(), 1);
+            localStorage.notas = JSON.stringify(notas);
+            $("#tareas").html(notas.length);
+            $("#de").html(notas.length);
+        });
 }
 
 function leerNotas() {
@@ -241,26 +277,27 @@ function leerNotas() {
         }
     })
     /*low high normal */
-    function cambiarPrioridad(nuevaPrioridad)
+    function cambiarPrioridad(nuevaPrioridad, index)
     {
         $(this).parent().parent().find(".prioridad").attr('aria-pressed', 'false');
         $(this).attr('aria-pressed', 'true');
-        notas[$(this).parent().parent().index()].priority = nuevaPrioridad;
+        notas[index].priority = nuevaPrioridad;
         localStorage.notas = JSON.stringify(notas);
         $("#div--tareas").html("");
         leerNotas();
     }
-    $(".low").click(()=>{
-        cambiarPrioridad("low");
-
+    $(".low").click(function(){
+        index = ($(this).parent().parent().index());
+        cambiarPrioridad("low", index);
     })
-    $(".normal").click(()=>{
-        cambiarPrioridad("normal");
+    $(".normal").click(function(){
+        index = ($(this).parent().parent().index());
+        cambiarPrioridad("normal", index);
         
     })
-    //$("#div--tareas").on("click", ".high", function () {
-        $(".high").click(()=>{
-        cambiarPrioridad("high");
+    $(".high").click(function(){
+        index = ($(this).parent().parent().index());
+        cambiarPrioridad("high", index);
         
     })
 
